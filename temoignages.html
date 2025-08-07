@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Témoignages - Scène-Jazzy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-style: italic;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #d4af37;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-links a.active {
+            color: #d4af37;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #d4af37;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: #d4af37;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 4rem 0 3rem 0;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #c8c8c8;
+            font-style: italic;
+            font-weight: 300;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 0 4rem 0;
+        }
+
+        .testimonials-section {
+            margin-bottom: 4rem;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .testimonial-card {
+            background: rgba(42, 42, 42, 0.8);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .testimonial-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #e8e8e8;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-content::before {
+            content: '"';
+            font-size: 3rem;
+            color: #d4af37;
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 0.2rem;
+        }
+
+        .testimonial-date {
+            font-size: 0.9rem;
+            color: #b8b8b8;
+            font-style: italic;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: rgba(42, 42, 42, 0.6);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            backdrop-filter: blur(15px);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-size: 2rem;
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .form-header p {
+            color: #c8c8c8;
+            font-size: 1rem;
+        }
+
+        .testimonial-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #d4af37;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            background: rgba(26, 26, 26, 0.7);
+            color: #e8e8e8;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-button {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #2a2a2a;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(45deg, #f4d03f, #d4af37);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #81c784;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .testimonial-card {
+                padding: 1.5rem;
+            }
+
+            .form-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                padding: 3rem 0 2rem 0;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .testimonial-card {
+                padding: 1rem;
+            }
+
+            .testimonial-content {
+                font-size: 1rem;
+            }
+
+            .form-section {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .testimonial-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .testimonial-card:nth-child(1) { animation-delay: 0.1s; }
+        .testimonial-card:nth-child(2) { animation-delay: 0.2s; }
+        .testimonial-card:nth-child(3) { animation-delay: 0.3s; }
+        .testimonial-card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="logo">Scène-Jazzy</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="photos.html">Photos</a></li>
+                    <li><a href="videos.html">Vidéos</a></li>
+                    <li><a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a></li>
+                    <li><a href="temoignages.html" class="active">Témoignages</a></li>
+                    <li><a href="prestations.html">Prestations</a></li>
+                    <li><a href="cours-de-chant.html">Cours de chant</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Accueil</a>
+        <a href="photos.html">Photos</a>
+        <a href="videos.html">Vidéos</a>
+        <a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a>
+        <a href="temoignages.html">Témoignages</a>
+        <a href="prestations.html">Prestations</a>
+        <a href="cours-de-chant.html">Cours de chant</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <main>
+        <section class="page-header">
+            <div class="container">
+                <h1>Témoignages</h1>
+                <p>Partagez votre expérience avec Scène-Jazzy</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="main-content">
+                <!-- Existing Testimonials -->
+                <section class="testimonials-section">
+                    <div class="testimonials-grid" id="testimonialsGrid">
+                        <!-- Exemple de témoignages existants -->
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                Une soirée absolument magique ! Florence et Mickaël ont créé une ambiance parfaite pour notre mariage. Leurs voix se complètent à merveille et le choix des morceaux était parfait.
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <div class="author-name">Marie</div>
+                                    <div class="testimonial-date">Décembre 2024</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                Un duo exceptionnel ! L'atmosphère jazz qu'ils ont créée était exactement ce que nous cherchions pour notre événement d'entreprise. Nos invités étaient enchantés.
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <div class="author-name">Pierre</div>
+                                    <div class="testimonial-date">Novembre 2024</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                Florence a une voix magnifique et Mickaël l'accompagne avec une délicatesse remarquable. Ils ont su s'adapter parfaitement à nos goûts musicaux.
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-info">
+                                    <div class="author-name">Sophie</div>
+                                    <div class="testimonial-date">Octobre 2024</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Add Testimonial Form -->
+                <section class="form-section">
+                    <div class="form-header">
+                        <h2>Partagez votre avis</h2>
+                        <p>Votre témoignage nous aide à nous améliorer et guide nos futurs clients</p>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        Merci ! Votre témoignage a été ajouté avec succès.
+                    </div>
+
+                    <form class="testimonial-form" id="testimonialForm">
+                        <div class="form-group">
+                            <label for="prenom">Prénom <span class="required">*</span></label>
+                            <input type="text" id="prenom" name="prenom" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nom">Nom (optionnel)</label>
+                            <input type="text" id="nom" name="nom">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email (optionnel)</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Votre témoignage <span class="required">*</span></label>
+                            <textarea id="message" name="message" placeholder="Partagez votre expérience avec Scène-Jazzy..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-button">Publier mon témoignage</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMobileMenu();
+            });
+        });
+
+        // Handle testimonial form submission
+        document.getElementById('testimonialForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const prenom = document.getElementById('prenom').value;
+            const nom = document.getElementById('nom').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Create new testimonial card
+            const testimonialCard = document.createElement('div');
+            testimonialCard.className = 'testimonial-card';
+            testimonialCard.style.opacity = '0';
+            testimonialCard.style.transform = 'translateY(30px)';
+            
+            const fullName = nom ? `${prenom} ${nom}` : prenom;
+            const currentDate = new Date().toLocaleDateString('fr-FR', { 
+                year: 'numeric', 
+                month: 'long' 
+            });
+            
+            testimonialCard.innerHTML = `
+                <div class="testimonial-content">
+                    ${message}
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-info">
+                        <div class="author-name">${fullName}</div>
+                        <div class="testimonial-date">${currentDate}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Add to the beginning of the grid
+            const grid = document.getElementById('testimonialsGrid');
+            grid.insertBefore(testimonialCard, grid.firstChild);
+            
+            // Animate the new card
+            setTimeout(() => {
+                testimonialCard.style.transition = 'all 0.5s ease';
+                testimonialCard.style.opacity = '1';
+                testimonialCard.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+            
+            // Scroll to the new testimonial
+            setTimeout(() => {
+                testimonialCard.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }, 600);
+        });
+    </script>
+</body>
+</html>

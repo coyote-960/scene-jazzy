@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéos - Scène-Jazzy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d4af37;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #d4af37;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover, .mobile-menu a.active {
+            color: #d4af37;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+            min-height: calc(100vh - 120px);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-size: 3rem;
+            color: #d4af37;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            font-style: italic;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            color: #c8c8c8;
+            font-style: italic;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Video Channels */
+        .video-channels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .channel-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(42, 42, 42, 0.3) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .channel-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .channel-card:hover::before {
+            opacity: 1;
+        }
+
+        .channel-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            border-radius: 50%;
+            margin: 0 auto 2rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #2a2a2a;
+            position: relative;
+            z-index: 2;
+        }
+
+        .channel-card h2 {
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-style: italic;
+            position: relative;
+            z-index: 2;
+        }
+
+        .channel-card p {
+            font-size: 1rem;
+            color: #b8b8b8;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .channel-button {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #2a2a2a;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .channel-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(45deg, #f4d03f, #d4af37);
+        }
+
+        .channel-button:active {
+            transform: translateY(0px);
+        }
+
+        /* Featured Video Section */
+        .featured-video {
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .featured-video h2 {
+            font-size: 2rem;
+            color: #d4af37;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .video-embed {
+            max-width: 800px;
+            margin: 0 auto;
+            aspect-ratio: 16/9;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 3px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .video-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .page-title p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+
+            .video-channels {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .channel-card {
+                padding: 2rem;
+            }
+
+            .main-content {
+                padding: 2rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .channel-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .channel-card p {
+                font-size: 0.9rem;
+            }
+
+            .video-embed {
+                margin: 0 20px;
+            }
+        }
+
+        /* Subtle animations */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .channel-card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .channel-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .video-embed {
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Scène-Jazzy</a>
+                <ul class="nav-links">
+                    <li><a href="photos.html">Photos</a></li>
+                    <li><a href="videos.html" class="active">Vidéos</a></li>
+                    <li><a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a></li>
+                    <li><a href="temoignages.html">Témoignages</a></li>
+                    <li><a href="cours-de-chant.html">Cours de chant</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Accueil</a>
+        <a href="photos.html">Photos</a>
+        <a href="videos.html" class="active">Vidéos</a>
+        <a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a>
+        <a href="temoignages.html">Témoignages</a>
+        <a href="cours-de-chant.html">Cours de chant</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="main-content">
+                <div class="page-title">
+                    <h1>Nos Vidéos</h1>
+                    <p>Découvrez l'univers musical de Scène-Jazzy à travers nos performances et créations</p>
+                </div>
+
+                <div class="video-channels">
+                    <div class="channel-card">
+                        <div class="channel-icon">🎵</div>
+                        <h2>Scène-Jazzy</h2>
+                        <p>Explorez nos performances en duo, nos reprises jazz et nos créations originales. Une sélection de vidéos qui capture l'essence de notre univers musical intimiste.</p>
+                        <a href="https://www.youtube.com/channel/UCuC9cQhFi7DruKOPn3fMxdw" target="_blank" class="channel-button">Voir la chaîne</a>
+                    </div>
+
+                    <div class="channel-card">
+                        <div class="channel-icon">🎤</div>
+                        <h2>Florence Lacaille</h2>
+                        <p>Découvrez l'univers personnel de Florence, ses interprétations solo, ses expérimentations vocales et son parcours artistique en tant que chanteuse.</p>
+                        <a href="https://www.youtube.com/channel/UCvcPo_MkyYnPnZswytGzVjw" target="_blank" class="channel-button">Voir la chaîne</a>
+                    </div>
+                </div>
+
+                <div class="featured-video">
+                    <h2>Vidéo à la Une</h2>
+                    <div class="video-embed">
+                        <iframe src="https://www.youtube.com/embed/CWoChKKRSY4?rel=0&modestbranding=1" 
+                                allowfullscreen 
+                                title="Teaser Scène-Jazzy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (link.getAttribute('target') !== '_blank') {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
