@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scène-Jazzy - Florence Lacaille & Mickaël Justiniano</title>
+    <title>Scène Jazzy - Florence Lacaille & Mickael Justiniano</title>
     <style>
         * {
             margin: 0;
@@ -13,93 +13,94 @@
 
         body {
             font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
-            color: #e8e8e8;
-            min-height: 100vh;
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
+        /* Header et Navigation */
+        header {
+            background-color: #3a3a3a;
+            padding: 20px 0;
+            position: relative;
+            border-bottom: 1px solid #555;
+        }
+
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* Header */
-        header {
-            padding: 20px 0;
-            position: relative;
-            z-index: 1000;
-        }
-
-        nav {
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #d4af37;
+            text-decoration: none;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-style: italic;
         }
 
-        .nav-links {
+        .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 30px;
         }
 
-        .nav-links a {
-            color: #e8e8e8;
+        .nav-menu a {
+            color: #e0e0e0;
             text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
             position: relative;
         }
 
-        .nav-links a:hover {
+        .nav-menu a:hover {
             color: #d4af37;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
         }
 
-        .nav-links a:after {
+        .nav-menu a::after {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
             bottom: -5px;
             left: 50%;
-            background: #d4af37;
+            background-color: #d4af37;
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
 
-        .nav-links a:hover:after {
+        .nav-menu a:hover::after {
             width: 100%;
         }
 
-        /* Hamburger Menu */
+        /* Menu hamburger */
         .hamburger {
             display: none;
             flex-direction: column;
             cursor: pointer;
-            padding: 5px;
+            width: 25px;
+            height: 20px;
+            justify-content: space-between;
         }
 
         .hamburger span {
-            width: 25px;
+            display: block;
             height: 3px;
-            background: #d4af37;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
+            width: 100%;
+            background-color: #d4af37;
+            transition: all 0.3s ease;
         }
 
         .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
+            transform: rotate(45deg) translate(6px, 6px);
         }
 
         .hamburger.active span:nth-child(2) {
@@ -107,170 +108,134 @@
         }
 
         .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
+            transform: rotate(-45deg) translate(6px, -6px);
         }
 
-        /* Mobile Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(26, 26, 26, 0.98);
-            backdrop-filter: blur(10px);
-            z-index: 999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu a {
-            color: #e8e8e8;
-            text-decoration: none;
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .mobile-menu a:hover {
-            color: #d4af37;
-        }
-
-        /* Hero Section */
+        /* Section principale */
         .hero {
+            min-height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 8rem 0;
-            position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 100%);
         }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .hero h1 {
+        .hero-title {
             font-size: 4rem;
             color: #d4af37;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
-            font-style: italic;
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-weight: normal;
         }
 
-        .hero h2 {
-            font-size: 1.5rem;
-            color: #c8c8c8;
-            margin-bottom: 2rem;
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: #c0c0c0;
             font-style: italic;
+            margin-bottom: 40px;
             font-weight: 300;
-            letter-spacing: 1px;
         }
 
-        .hero p {
-            font-size: 1.1rem;
+        .hero-description {
+            font-size: 1.2rem;
+            color: #b0b0b0;
             line-height: 1.8;
-            max-width: 600px;
-            margin: 0 auto 3rem auto;
-            color: #b8b8b8;
-            text-align: center;
-            font-weight: 300;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-button {
-            background: linear-gradient(45deg, #d4af37, #f4d03f);
-            color: #2a2a2a;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
             display: inline-block;
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #2d2d2d;
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-            background: linear-gradient(45deg, #f4d03f, #d4af37);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+            background: linear-gradient(135deg, #e6c547, #d4af37);
         }
 
-        .cta-button:active {
-            transform: translateY(-1px);
-        }
-
-        /* Video Modal */
+        /* Modal vidéo */
         .video-modal {
             display: none;
             position: fixed;
-            top: 0;
+            z-index: 1000;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
             animation: fadeIn 0.3s ease;
         }
 
-        .video-modal.active {
+        .video-modal.show {
             display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .video-container {
+        .video-content {
             position: relative;
             width: 90%;
             max-width: 800px;
-            aspect-ratio: 16/9;
             background: #000;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
         }
 
-        .video-container iframe {
+        .video-content iframe {
             width: 100%;
-            height: 100%;
+            height: 450px;
             border: none;
         }
 
-        .close-button {
+        .close-video {
             position: absolute;
             top: -40px;
             right: 0;
-            background: none;
-            border: none;
-            color: #fff;
+            color: #d4af37;
             font-size: 2rem;
             cursor: pointer;
-            padding: 10px;
+            background: none;
+            border: none;
+            padding: 5px;
             transition: color 0.3s ease;
         }
 
-        .close-button:hover {
-            color: #d4af37;
+        .close-video:hover {
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeIn {
@@ -278,176 +243,225 @@
             to { opacity: 1; }
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100vh;
+                width: 100%;
+                background-color: #2d2d2d;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu a {
+                font-size: 1.5rem;
+                margin: 20px 0;
             }
 
             .hamburger {
                 display: flex;
+                z-index: 1000;
             }
 
-            .hero {
-                padding: 6rem 0;
-            }
-
-            .hero h1 {
+            .hero-title {
                 font-size: 2.5rem;
             }
 
-            .hero h2 {
-                font-size: 1.2rem;
+            .hero-subtitle {
+                font-size: 1.4rem;
             }
 
-            .hero p {
+            .hero-description {
                 font-size: 1rem;
-                padding: 0 20px;
+                padding: 0 10px;
             }
 
             .logo {
-                font-size: 1.5rem;
+                font-size: 2rem;
             }
 
-            .video-container {
-                width: 95%;
-                margin: 20px;
-            }
-
-            .close-button {
-                top: -50px;
-                font-size: 1.5rem;
+            .video-content iframe {
+                height: 250px;
             }
         }
 
         @media (max-width: 480px) {
-            .hero h1 {
+            .hero-title {
                 font-size: 2rem;
             }
 
-            .hero h2 {
-                font-size: 1rem;
+            .hero-subtitle {
+                font-size: 1.2rem;
             }
 
             .cta-button {
-                padding: 12px 30px;
+                padding: 12px 25px;
                 font-size: 1rem;
             }
-        }
 
-        /* Subtle animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hero-content {
-            animation: float 6s ease-in-out infinite;
+            .video-content iframe {
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav>
-                <div class="logo">Scène-Jazzy</div>
-                <ul class="nav-links">
-                     <li><a href="index.html">Accueil</a></li>
+    <header>
+        <div class="container">
+            <nav class="nav-container">
+                <a href="#" class="logo">Scène Jazzy</a>
+                
+                <ul class="nav-menu" id="navMenu">
                     <li><a href="photos.html">Photos</a></li>
                     <li><a href="videos.html">Vidéos</a></li>
                     <li><a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a></li>
-                    <li><a href="prestations.html">Prestations</a></li>
                     <li><a href="temoignages.html">Témoignages</a></li>
-                    <li><a href="cours-de-chant.html" class="active">Cours de chant</a></li>
+                    <li><a href="cours-de-chant.html">Cours de chant</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <div class="hamburger" onclick="toggleMobileMenu()">
+
+                <div class="hamburger" id="hamburger">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
             </nav>
-        </header>
-    </div>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="index.html">Accueil</a>
-        <a href="photos.html">Photos</a>
-        <a href="videos.html">Vidéos</a>
-	<a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a>
-        <a href="prestations.html">Prestations</a>
-        <a href="temoignages.html">Témoignages</a>
-        <a href="cours-de-chant.html">Cours de chant</a>
-        <a href="contact.html">Contact</a>
-    </div>
+        </div>
+    </header>
 
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1>Scène-Jazzy</h1>
-                <h2>Florence Lacaille & Mickaël Justiniano</h2>
-                <p>Plongez dans l'univers intimiste du jazz avec notre duo exceptionnel. Une voix envoûtante accompagnée d'un piano délicat pour créer une ambiance unique et chaleureuse lors de vos événements les plus précieux.</p>
+                <h1 class="hero-title">Scène Jazzy</h1>
+                <h2 class="hero-subtitle">Florence Lacaille & Mickael Justiniano</h2>
+                <p class="hero-description">
+                    Plongez dans l'univers intimiste du jazz avec notre duo exceptionnel. Une voix envoûtante accompagnée 
+                    d'un piano délicat pour créer une ambiance unique et chaleureuse lors de vos événements les plus 
+                    précieux.
+                </p>
                 <button class="cta-button" onclick="openVideo()">Voir le teaser</button>
             </div>
         </section>
     </main>
 
-    <!-- Video Modal -->
-    <div class="video-modal" id="videoModal" onclick="closeVideo(event)">
-        <div class="video-container">
-            <button class="close-button" onclick="closeVideo()">&times;</button>
+    <!-- Modal vidéo -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-content">
+            <button class="close-video" onclick="closeVideo()">&times;</button>
             <iframe id="videoFrame" src="" allowfullscreen></iframe>
         </div>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const hamburger = document.querySelector('.hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-        }
+        // Menu hamburger
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
 
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Fermer le menu en cliquant sur un lien
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Gestion vidéo modal
         function openVideo() {
             const modal = document.getElementById('videoModal');
-            const videoFrame = document.getElementById('videoFrame');
+            const iframe = document.getElementById('videoFrame');
             
-            videoFrame.src = 'https://www.youtube.com/embed/Dw_HOq90YLI?autoplay=1&rel=0&modestbranding=1';
-            modal.classList.add('active');
+            // Ajouter paramètres YouTube pour détecter la fin
+            iframe.src = 'https://www.youtube.com/embed/CWoChKKRSY4?autoplay=1&enablejsapi=1';
+            modal.classList.add('show');
             
-            // Prevent body scrolling when modal is open
+            // Empêcher le scroll du body
             document.body.style.overflow = 'hidden';
+            
+            // Écouter les événements YouTube
+            window.addEventListener('message', handleYouTubeMessage);
         }
 
-        function closeVideo(event) {
-            // Close only if clicking on the modal background or close button
-            if (event && event.target.closest('.video-container') && !event.target.classList.contains('close-button')) {
-                return;
-            }
-            
+        function closeVideo() {
             const modal = document.getElementById('videoModal');
-            const videoFrame = document.getElementById('videoFrame');
+            const iframe = document.getElementById('videoFrame');
             
-            modal.classList.remove('active');
-            videoFrame.src = '';
+            iframe.src = '';
+            modal.classList.remove('show');
             
-            // Restore body scrolling
+            // Réactiver le scroll du body
             document.body.style.overflow = 'auto';
+            
+            // Retirer l'écouteur d'événements
+            window.removeEventListener('message', handleYouTubeMessage);
         }
 
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
+        // Gérer les messages de l'API YouTube
+        function handleYouTubeMessage(event) {
+            // Vérifier que le message vient de YouTube
+            if (event.origin !== 'https://www.youtube.com') return;
+            
+            try {
+                const data = JSON.parse(event.data);
+                // Fermer la vidéo quand elle se termine (state 0 = ended)
+                if (data.event === 'onStateChange' && data.info === 0) {
+                    closeVideo();
+                }
+            } catch (e) {
+                // Ignorer les erreurs de parsing
+            }
+        }
+
+        // Fermer la vidéo en cliquant à côté
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
                 closeVideo();
             }
         });
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                toggleMobileMenu();
+        // Fermer la vidéo avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideo();
+            }
+        });
+
+        // Animation d'apparition au scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Smooth scroll pour les ancres
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
     </script>
