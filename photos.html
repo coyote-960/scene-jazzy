@@ -320,33 +320,6 @@
             right: 20px;
         }
 
-        /* Filter buttons */
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            color: #d4af37;
-            padding: 8px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: #d4af37;
-            color: #2a2a2a;
-            border-color: #d4af37;
-        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -408,14 +381,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .filter-buttons {
-                gap: 0.5rem;
-            }
 
-            .filter-btn {
-                padding: 6px 15px;
-                font-size: 0.8rem;
-            }
         }
 
         /* Animation */
@@ -479,13 +445,6 @@
                 <div class="page-title">
                     <h1>Galerie Photos</h1>
                     <p>Découvrez l'atmosphère de nos concerts et l'univers visuel de Scène-Jazzy</p>
-                </div>
-
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">Toutes</button>
-                    <button class="filter-btn" data-filter="concert">Concerts</button>
-                    <button class="filter-btn" data-filter="studio">Studio</button>
-                    <button class="filter-btn" data-filter="portrait">Portraits</button>
                 </div>
 
                 <div class="photo-gallery" id="photoGallery">
@@ -680,24 +639,6 @@
             modalDescription.textContent = photos[currentPhotoIndex].description;
         }
 
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const filter = btn.getAttribute('data-filter');
-                const photoItems = document.querySelectorAll('.photo-item');
-                
-                photoItems.forEach(item => {
-                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
 
         // Keyboard navigation
         document.addEventListener('keydown', function(event) {
