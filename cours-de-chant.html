@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours de chant - Scène-Jazzy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header - Identique à l'accueil */
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d4af37;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #d4af37;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover, .mobile-menu a.active {
+            color: #d4af37;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 6rem 0 4rem 0;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #b8b8b8;
+            font-weight: 300;
+        }
+
+        /* Florence Presentation */
+        .florence-section {
+            padding: 4rem 0;
+            background: rgba(212, 175, 55, 0.02);
+        }
+
+        .florence-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .florence-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .florence-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(212, 175, 55, 0.1), transparent);
+            z-index: 1;
+            border-radius: 20px;
+        }
+
+        .florence-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .florence-image:hover img {
+            transform: scale(1.02);
+        }
+
+        /* Image placeholder pour Florence */
+        .florence-placeholder {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a2a2a;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .florence-content h2 {
+            font-size: 2.8rem;
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .florence-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #c8c8c8;
+            font-weight: 300;
+        }
+
+        .florence-content .highlight {
+            color: #d4af37;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* Cours Details */
+        .cours-details {
+            padding: 5rem 0;
+        }
+
+        .cours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .cours-card {
+            background: linear-gradient(145deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.9));
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .cours-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .cours-card h3 {
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .cours-card .cours-type {
+            font-size: 1rem;
+            color: #c8c8c8;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .cours-card ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .cours-card ul li {
+            font-size: 1rem;
+            color: #b8b8b8;
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .cours-card ul li::before {
+            content: '♪';
+            color: #d4af37;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .cours-price {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #d4af37;
+            font-weight: bold;
+            padding: 1rem;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+
+        /* Methodologie Section */
+        .methodologie {
+            padding: 5rem 0;
+            background: rgba(212, 175, 55, 0.02);
+        }
+
+        .methodologie-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .methodologie h2 {
+            font-size: 2.8rem;
+            color: #d4af37;
+            margin-bottom: 2rem;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .methodologie-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .methodo-item {
+            background: rgba(42, 42, 42, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .methodo-item:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .methodo-item h3 {
+            font-size: 1.4rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .methodo-item p {
+            font-size: 1rem;
+            color: #c8c8c8;
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .cta-content p {
+            font-size: 1.1rem;
+            color: #b8b8b8;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #d4af37, #f4d03f);
+            color: #2a2a2a;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(45deg, #f4d03f, #d4af37);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .page-header {
+                padding: 4rem 0 2rem 0;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .florence-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .florence-content h2 {
+                font-size: 2.2rem;
+                text-align: center;
+            }
+
+            .cours-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .methodologie h2 {
+                font-size: 2.2rem;
+            }
+
+            .methodologie-content {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .florence-content h2 {
+                font-size: 1.8rem;
+            }
+
+            .cours-card {
+                padding: 1.5rem;
+            }
+
+            .methodologie h2 {
+                font-size: 1.8rem;
+            }
+
+            .cta-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Animation d'apparition */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cours-card, .methodo-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Scène-Jazzy</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="photos.html">Photos</a></li>
+                    <li><a href="videos.html">Vidéos</a></li>
+                    <li><a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a></li>
+                    <li><a href="prestations.html">Prestations</a></li>
+                    <li><a href="temoignages.html">Témoignages</a></li>
+                    <li><a href="cours-de-chant.html" class="active">Cours de chant</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Accueil</a>
+        <a href="photos.html">Photos</a>
+        <a href="videos.html">Vidéos</a>
+	<a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a>
+        <a href="prestations.html">Prestations</a>
+        <a href="temoignages.html">Témoignages</a>
+        <a href="cours-de-chant.html" class="active">Cours de chant</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="page-header-content">
+                <h1>Cours de Chant</h1>
+                <p>Développez votre voix et votre style avec Florence Lacaille. Des cours personnalisés pour découvrir l'art du chant jazz dans une ambiance bienveillante et professionnelle.</p>
+            </div>
+        </section>
+
+        <!-- Florence Presentation -->
+        <section class="florence-section">
+            <div class="container">
+                <div class="florence-container">
+                    <div class="florence-image">
+                        <!-- 
+                        COMMENT AJOUTER LA PHOTO DE FLORENCE :
+                        
+                        Remplacez la div ci-dessous par :
+                        <img src="chemin/vers/photo-florence.jpg" alt="Florence Lacaille, professeure de chant">
+                        
+                        Recommandations pour la photo :
+                        - Format portrait ou carré de préférence
+                        - Résolution minimum : 600x800 pixels
+                        - Formats acceptés : .jpg, .png, .webp
+                        - La photo sera automatiquement redimensionnée à 500px de hauteur
+                            <div class="florence-placeholder">
+                            Photo de Florence Lacaille<br>
+                            (Professeure de chant)
+                        </div>
+                        -->
+                        <img src="images/Florence.jpg" alt="Florence Lacaille, professeure de chant">
+                    </div>
+                    <div class="florence-content">
+                        <h2>Votre Professeure</h2>
+                        <p>
+                            <span class="highlight">Florence Lacaille</span> vous accompagne dans votre apprentissage du chant avec plus de 15 ans d'expérience sur scène et en enseignement. Artiste passionnée et pédagogue bienveillante, elle saura vous guider vers l'expression de votre propre style.
+                        </p>
+                        <p>
+                            Formée aux techniques classiques et jazz, Florence adapte son approche à chaque élève, débutant ou confirmé. Son expérience scénique aux côtés de <span class="highlight">Mickaël Justiniano</span> enrichit ses cours d'une dimension artistique authentique.
+                        </p>
+                        <p>
+                            Que vous souhaitiez chanter pour le plaisir, vous perfectionner ou vous préparer à la scène, Florence vous propose un enseignement sur mesure dans un cadre chaleureux et encourageant.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cours Details -->
+        <section class="cours-details">
+            <div class="container">
+                <div class="cours-grid">
+                    
+                    <div class="cours-card">
+                        <h3>Cours Particuliers</h3>
+                        <div class="cours-type">Séance individuelle - 1h</div>
+                        <ul>
+                            <li>Technique vocale personnalisée</li>
+                            <li>Travail sur le répertoire de votre choix</li>
+                            <li>Corrections individuelles et conseils scéniques</li>
+                            <li>Préparation aux auditions ou concerts</li>
+                            <li>Horaires flexibles selon disponibilités</li>
+                        </ul>
+                        <div class="cours-price">25€ / séance</div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodologie -->
+        <section class="methodologie">
+            <div class="container">
+                <div class="methodologie-container">
+                    <h2>Une Approche Personnalisée</h2>
+                    <div class="methodologie-content">
+                        
+                        <div class="methodo-item">
+                            <h3>Technique Vocale</h3>
+                            <p>Travail sur la respiration, la posture, le placement de voix et l'articulation. Exercices d'échauffement et de détente musculaire adaptés à chaque voix.</p>
+                        </div>
+
+                        <div class="methodo-item">
+                            <h3>Style & Interprétation</h3>
+                            <p>Développement de votre style personnel à travers l'étude des grands standards jazz, de la variété ou du chant lyrique et l'exploration de différentes approches vocales et stylistiques.</p>
+                        </div>
+
+                        <div class="methodo-item">
+                            <h3>Présence Scénique</h3>
+                            <p>Conseils pour gérer le trac, occuper l'espace, communiquer avec le public et développer votre charisme naturel sur scène.</p>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Prêt à Commencer ?</h2>
+                    <p>
+                        Réservez votre premier cours d'essai et découvrez le plaisir du chant jazz dans un cadre professionnel et bienveillant. 
+					</p>
+                    <a href="contact.html" class="cta-button">Contact & Réservation</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function toggleMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMobileMenu();
+            });
+        });
+
+        // Animation d'apparition séquentielle des cartes
+        const cards = document.querySelectorAll('.cours-card, .methodo-item');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>

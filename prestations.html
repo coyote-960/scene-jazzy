@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestations - Scène-Jazzy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header - Identique à l'accueil */
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d4af37;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #d4af37;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover, .mobile-menu a.active {
+            color: #d4af37;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 6rem 0 4rem 0;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #b8b8b8;
+            font-weight: 300;
+        }
+
+        /* Prestations Sections */
+        .prestations-section {
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .prestations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .prestation-card {
+            background: linear-gradient(145deg, rgba(42, 42, 42, 0.8), rgba(26, 26, 26, 0.9));
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .prestation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .prestation-image {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prestation-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .prestation-card:hover .prestation-image img {
+            transform: scale(1.05);
+        }
+
+        /* Image placeholder styling */
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a2a2a;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .prestation-content {
+            padding: 1.5rem;
+        }
+
+        .prestation-title {
+            font-size: 1.4rem;
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .prestation-date {
+            font-size: 0.9rem;
+            color: #c8c8c8;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .prestation-location {
+            font-size: 1rem;
+            color: #e8e8e8;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .prestation-description {
+            font-size: 0.95rem;
+            color: #b8b8b8;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Upcoming prestations styling */
+        .upcoming-prestations .prestation-card {
+            border-color: rgba(212, 175, 55, 0.3);
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.1), rgba(26, 26, 26, 0.9));
+        }
+
+        .upcoming-prestations .prestation-card:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Past prestations styling */
+        .past-prestations {
+            background: rgba(212, 175, 55, 0.02);
+            padding: 4rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .page-header {
+                padding: 4rem 0 2rem 0;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .prestations-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .prestations-section {
+                padding: 3rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .prestation-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Animation d'apparition */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .prestation-card {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Scène-Jazzy</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="photos.html">Photos</a></li>
+                    <li><a href="videos.html">Vidéos</a></li>
+                    <li><a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a></li>
+                    <li><a href="prestations.html" class="active">Prestations</a></li>
+                    <li><a href="temoignages.html">Témoignages</a></li>
+                    <li><a href="cours-de-chant.html">Cours de chant</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+         <a href="index.html">Accueil</a>
+        <a href="photos.html">Photos</a>
+        <a href="videos.html">Vidéos</a>
+	<a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a>
+        <a href="prestations.html" class="active">Prestations</a>
+        <a href="temoignages.html">Témoignages</a>
+        <a href="cours-de-chant.html">Cours de chant</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <main>
+        <!-- Page Header -->
+        
+        <!-- Prestations passées -->
+        <section class="prestations-section past-prestations">
+            <div class="container">
+                <h2 class="section-title">Nos prestations</h2>
+                <div class="prestations-grid">
+                    
+                    <!-- 
+                    COMMENT AJOUTER UNE PRESTATION PASSÉE :
+                    
+                    Même procédure que pour les prestations à venir, mais ajoutez le bloc dans cette section "Prestations Réalisées".
+                    Vous pouvez ajouter des commentaires sur le déroulement, l'accueil du public, etc.
+                    -->
+                    
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grange.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Soirée Saint Valentin</h3>
+                            <div class="prestation-location">Restaurant La Grange - Mont Sain Aignan</div>
+                            <p class="prestation-description">Soirée chaleureuse pour la Saint-Valentin dans le cadre accueillant d'un restaurant au charme rustique.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/Hotel-de-Dieppe-batiment.jpg" alt="Hotel de Dieppe">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Soirée Beaujolais nouveau</h3>
+                            <div class="prestation-location">Hôtel de Dieppe - Rouen</div>
+                            <p class="prestation-description">Concert à l'occasion de la sortie du Beaujolais nouveau.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/mediatheque.jpg" alt="Médiathèque Marlène Jobert">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Concert d'inauguration</h3>
+                            <div class="prestation-location">Médiathèque Marlène Jobert - La Londe</div>
+                            <p class="prestation-description">Concert d'inauguration de la médiathèque Marlène Jobert en présence de la comédienne.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/Hotel-Bourgtheroulde.jpg" alt="Hôtel Bourgtheroulde">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Concert au prestigieux Hôtel Bourgtheroulde</h3>
+                            <div class="prestation-location">Hôtel Bourgtheroulde - Rouen</div>
+                            <p class="prestation-description">Concert dans la grande salle de l'Hôtel Bourgtheroulde, au coeur de Rouen.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/cafe_tribunaux.webp" alt="Café des Tribunaux">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Concert au café de Tribunaux à Dieppe</h3>
+                            <div class="prestation-location">Café des Tribunaux - Dieppe</div>
+                            <p class="prestation-description">Animation musicale estivale dans l'emblématique café brasserie de Dieppe.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/cafe-de-l-epoque.jpg" alt="Le café de l'Epoque">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Concert au Café de l'Epoque</h3>
+                            <div class="prestation-location">Café de l'Epoque, Rouen</div>
+                            <p class="prestation-description">Dîner concert au Café de l'Epoque, restaurant brasserie au style rétro.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Festival Jazz sous les Étoiles</h3>
+                            <div class="prestation-location">Place du Marché, Saint-Germain-en-Laye</div>
+                            <p class="prestation-description">Concert en plein air devant un public nombreux venu profiter d'une soirée d'été. Une ambiance festive et chaleureuse, ponctuée d'échanges avec le public entre les morceaux.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Vernissage - Galerie d'Art Le Marais</h3>
+                            <div class="prestation-location">Galerie d'Art contemporain, Le Marais, Paris</div>
+                            <p class="prestation-description">Ambiance musicale feutrée pour accompagner l'inauguration d'une exposition. Un répertoire subtil, pensé pour se fondre dans les conversations sans jamais les couvrir.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Brunch Jazz Dominical</h3>
+                            <div class="prestation-location">Hôtel Lutetia - Le Bar Josephine, Paris</div>
+                            <p class="prestation-description">Prestation en formule brunch, un moment convivial et détendu où le jazz a accompagné en douceur le repas des clients, entre standards connus et improvisations plus personnelles.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Gala Caritatif - Association Cœur en Or</h3>
+                            <div class="prestation-location">Salons Hoche, 75008 Paris</div>
+                            <p class="prestation-description">Prestation offerte au profit d'une association caritative. Une soirée émouvante et généreuse, où la musique a accompagné les prises de parole et les temps forts de la soirée de collecte.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">20 ans de la Maison Bellemare</h3>
+                            <div class="prestation-location">Pavillon Ledoyen, Champs-Élysées, Paris</div>
+                            <p class="prestation-description">Célébration des vingt ans d'une maison familiale prestigieuse. Un répertoire sur mesure retraçant en musique les grandes étapes de l'histoire de l'entreprise, très apprécié par les dirigeants et les invités.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Avant-Scène - Théâtre des Bouffes Parisiens</h3>
+                            <div class="prestation-location">Théâtre des Bouffes Parisiens, Paris</div>
+                            <p class="prestation-description">Prestation en première partie de soirée avant une représentation théâtrale. Un accueil chaleureux du public, séduit par ce mariage entre musique jazz et art dramatique.</p>
+                        </div>
+                    </div>
+
+                    <div class="prestation-card">
+                        <div class="prestation-image">
+                            <img src="images/la-grandge.webp" alt="La Grange">
+                        </div>
+                        <div class="prestation-content">
+                            <h3 class="prestation-title">Réveillon du Nouvel An</h3>
+                            <div class="prestation-location">Hôtel Particulier, Neuilly-sur-Seine</div>
+                            <p class="prestation-description">Prestation privée pour accompagner le passage à la nouvelle année. Une soirée festive et chic, du répertoire jazz classique aux titres plus dansants pour célébrer minuit dans la joie.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function toggleMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMobileMenu();
+            });
+        });
+
+        // Animation d'apparition séquentielle des cartes
+        const cards = document.querySelectorAll('.prestation-card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>

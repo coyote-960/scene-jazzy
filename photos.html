@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photos - Scène-Jazzy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-style: italic;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #d4af37;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #d4af37;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover:after, .nav-links a.active:after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #d4af37;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(26, 26, 26, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover, .mobile-menu a.active {
+            color: #d4af37;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 4rem 0;
+            min-height: calc(100vh - 120px);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title h1 {
+            font-size: 3rem;
+            color: #d4af37;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            font-style: italic;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            color: #c8c8c8;
+            font-style: italic;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Photo Gallery */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .photo-item {
+            background: rgba(42, 42, 42, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .photo-caption h3 {
+            color: #d4af37;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .photo-caption p {
+            color: #b8b8b8;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Modal for fullscreen images */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .photo-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 2rem 1.5rem 1.5rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .modal-caption h3 {
+            color: #d4af37;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .close-button {
+            position: absolute;
+            top: -50px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: #d4af37;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212, 175, 55, 0.8);
+            border: none;
+            color: #2a2a2a;
+            font-size: 2rem;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #d4af37;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button.prev {
+            left: 20px;
+        }
+
+        .nav-button.next {
+            right: 20px;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .page-title p {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+
+            .photo-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .main-content {
+                padding: 2rem 0;
+            }
+
+            .nav-button {
+                font-size: 1.5rem;
+                padding: 8px 12px;
+            }
+
+            .nav-button.prev {
+                left: 10px;
+            }
+
+            .nav-button.next {
+                right: 10px;
+            }
+
+            .close-button {
+                top: -40px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title h1 {
+                font-size: 1.8rem;
+            }
+
+            .photo-gallery {
+                grid-template-columns: 1fr;
+            }
+
+
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .photo-item {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .photo-item:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .photo-item:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="index.html" class="logo">Scène-Jazzy</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="photos.html" class="active">Photos</a></li>
+                    <li><a href="videos.html">Vidéos</a></li>
+                    <li><a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a></li>
+                    <li><a href="prestations.html">Prestations</a></li>
+                    <li><a href="temoignages.html">Témoignages</a></li>
+                    <li><a href="cours-de-chant.html">Cours de chant</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Accueil</a>
+        <a href="photos.html" class="active">Photos</a>
+        <a href="videos.html">Vidéos</a>
+	<a href="https://soundcloud.com/scene-jazzy" target="_blank">Soundcloud</a>
+        <a href="prestations.html">Prestations</a>
+        <a href="temoignages.html">Témoignages</a>
+        <a href="cours-de-chant.html">Cours de chant</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="main-content">
+                <div class="page-title">
+                    <h1>Galerie Photos</h1>
+                    <p>Découvrez l'atmosphère de nos concerts et l'univers visuel de Scène-Jazzy</p>
+                </div>
+
+                <div class="photo-gallery" id="photoGallery">
+                    <!-- Photo placeholders - remplacez par vos vraies images -->
+                    <div class="photo-item" data-category="photo" onclick="openModal(0)">
+                        <img src="images/Big-Art.jpg" alt="Concert Scène-Jazzy">
+                        <div class="photo-caption">
+                            <h3>Concert au Big Art</h3>
+                            <p>Une soirée mémorable dans l'ambiance feutrée du Big Art</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(1)">
+                        <img src="images/Domaine-du-Bois-Heroult.jpg" alt="Domaine de Bois Heroult">
+                        <div class="photo-caption">
+                            <h3>Domaine de Bois Heroult</h3>
+                            <p>Soirée Elvis Presley dans le cadre des les journées du patrimoine</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(2)">
+                        <img src="images/Theatre-du-Robec.jpg" alt="Théâtre du Robec">
+                        <div class="photo-caption">
+                            <h3>Théâtre du Robec</h3>
+                            <p>Texte à modifier</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(3)">
+                        <img src="https://via.placeholder.com/400x250/2a2a2a/d4af37?text=Duo+Performance" alt="Performance duo">
+                        <div class="photo-caption">
+                            <h3>Florence & Mickaël</h3>
+                            <p>La complicité musicale entre Florence et Mickaël lors d'une performance live</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(4)">
+                        <img src="https://via.placeholder.com/400x250/2a2a2a/d4af37?text=Mickaël+Piano" alt="Mickaël au piano">
+                        <div class="photo-caption">
+                            <h3>Mickaël au piano</h3>
+                            <p>L'élégance et la précision de Mickaël Justiniano dans son élément naturel</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(5)">
+                        <img src="https://via.placeholder.com/400x250/2a2a2a/d4af37?text=Backstage" alt="Backstage">
+                        <div class="photo-caption">
+                            <h3>Dans les coulisses</h3>
+                            <p>Instants précieux de préparation avant de monter sur scène</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(6)">
+                        <img src="https://via.placeholder.com/400x250/2a2a2a/d4af37?text=Evening+Show" alt="Spectacle soirée">
+                        <div class="photo-caption">
+                            <h3>Soirée jazz intime</h3>
+                            <p>L'atmosphère chaleureuse d'une soirée jazz avec notre public fidèle</p>
+                        </div>
+                    </div>
+
+                    <div class="photo-item" data-category="photo" onclick="openModal(7)">
+                        <img src="https://via.placeholder.com/400x250/2a2a2a/d4af37?text=Artistic+Shot" alt="Photo artistique">
+                        <div class="photo-caption">
+                            <h3>Vision artistique</h3>
+                            <p>Une approche créative capturant l'essence poétique de notre musique</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Photo Modal -->
+    <div class="photo-modal" id="photoModal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">&times;</button>
+            <button class="nav-button prev" onclick="previousPhoto()">‹</button>
+            <button class="nav-button next" onclick="nextPhoto()">›</button>
+            <img id="modalImage" src="" alt="">
+            <div class="modal-caption">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDescription"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPhotoIndex = 0;
+        let currentFilter = 'all';
+        
+        const photos = [
+            {
+                src: "images/Big-Art.jpg?text=Concert+1",
+                title: "Concert au Big Art",
+                description: "Une soirée mémorable dans l'ambiance feutrée du Big Art avec notre répertoire jazz"
+            },
+            {
+                src: "images/Domaine-du-Bois-Heroult.jpg?text=Domaine de Bois Heroult",
+                title: "Domaine de Bois Heroult",
+                description: "Soirée Elvis Presley dans le cadre des les journées du patrimoine"
+            },
+            {
+                src: "images/Theatre-du-Robec.jpg?text=Théâtre du Robec",
+                title: "Théâtre du Robec",
+                description: "Texte à modifier"
+            },
+            {
+                src: "https://via.placeholder.com/800x600/2a2a2a/d4af37?text=Duo+Performance",
+                title: "Florence & Mickaël",
+                description: "La complicité musicale entre Florence et Mickaël lors d'une performance live"
+            },
+            {
+                src: "https://via.placeholder.com/800x600/2a2a2a/d4af37?text=Mickaël+Piano",
+                title: "Mickaël au piano",
+                description: "L'élégance et la précision de Mickaël Justiniano dans son élément naturel"
+            },
+            {
+                src: "https://via.placeholder.com/800x600/2a2a2a/d4af37?text=Backstage",
+                title: "Dans les coulisses",
+                description: "Instants précieux de préparation avant de monter sur scène"
+            },
+            {
+                src: "https://via.placeholder.com/800x600/2a2a2a/d4af37?text=Evening+Show",
+                title: "Soirée jazz intime",
+                description: "L'atmosphère chaleureuse d'une soirée jazz avec notre public fidèle"
+            },
+            {
+                src: "https://via.placeholder.com/800x600/2a2a2a/d4af37?text=Artistic+Shot",
+                title: "Vision artistique",
+                description: "Une approche créative capturant l'essence poétique de notre musique"
+            }
+        ];
+
+        function toggleMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function openModal(index) {
+            currentPhotoIndex = index;
+            const modal = document.getElementById('photoModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            
+            modalImage.src = photos[index].src;
+            modalTitle.textContent = photos[index].title;
+            modalDescription.textContent = photos[index].description;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event && event.target.closest('.modal-content') && !event.target.classList.contains('close-button')) {
+                return;
+            }
+            
+            const modal = document.getElementById('photoModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+            updateModalContent();
+        }
+
+        function previousPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+            updateModalContent();
+        }
+
+        function updateModalContent() {
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            
+            modalImage.src = photos[currentPhotoIndex].src;
+            modalTitle.textContent = photos[currentPhotoIndex].title;
+            modalDescription.textContent = photos[currentPhotoIndex].description;
+        }
+
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('photoModal');
+            if (modal.classList.contains('active')) {
+                if (event.key === 'Escape') {
+                    closeModal();
+                } else if (event.key === 'ArrowRight') {
+                    nextPhoto();
+                } else if (event.key === 'ArrowLeft') {
+                    previousPhoto();
+                }
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (link.getAttribute('target') !== '_blank') {
+                    toggleMobileMenu();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
