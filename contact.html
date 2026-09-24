@@ -345,6 +345,23 @@
             display: block;
         }
 
+        /* Error Message */
+        .error-message {
+            background: rgba(198, 40, 40, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.4);
+            color: #ef9a9a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -474,9 +491,14 @@
                     <p>Vous souhaitez faire appel à nos services pour votre événement ? Contactez-nous pour discuter de votre projet et recevoir un devis personnalisé.</p>
                 </div>
 
-                <form class="contact-form" id="contactForm">
+                <!-- IMPORTANT : remplacez VOTRE_FORM_ID_CONTACT ci-dessous par l'identifiant
+                     de votre formulaire Formspree relié à contact@scene-jazzy.fr -->
+                <form class="contact-form" id="contactForm" action="https://formspree.io/f/VOTRE_FORM_ID_CONTACT" method="POST">
                     <div class="success-message" id="successMessage">
                         Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.
+                    </div>
+                    <div class="error-message" id="errorMessage">
+                        Une erreur est survenue lors de l'envoi. Merci de réessayer, ou de nous contacter directement à contact@scene-jazzy.fr.
                     </div>
 
                     <div class="form-group">
@@ -508,6 +530,12 @@
                         <label for="message">Message *</label>
                         <textarea id="message" name="message" required placeholder="Décrivez-nous votre projet, vos attentes, le lieu de l'événement..."></textarea>
                     </div>
+
+                    <!-- Champ piège anti-spam : invisible pour les humains -->
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+                    <!-- Objet de l'email reçu -->
+                    <input type="hidden" name="_subject" value="Nouvelle demande de contact - Scène-Jazzy">
 
                     <button type="submit" class="submit-btn" id="submitBtn">Envoyer le message</button>
                 </form>
@@ -549,31 +577,43 @@
         // Form submission handling
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
+            const form = this;
             const submitBtn = document.getElementById('submitBtn');
             const successMessage = document.getElementById('successMessage');
-            
+            const errorMessage = document.getElementById('errorMessage');
+
+            successMessage.classList.remove('show');
+            errorMessage.classList.remove('show');
+
             // Disable submit button
             submitBtn.disabled = true;
             submitBtn.textContent = 'Envoi en cours...';
-            
-            // Simulate form submission (replace with actual form handling)
-            setTimeout(() => {
-                // Show success message
-                successMessage.classList.add('show');
-                
-                // Reset form
-                this.reset();
-                
-                // Re-enable submit button
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    successMessage.classList.add('show');
+                    form.reset();
+
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 5000);
+                } else {
+                    errorMessage.classList.add('show');
+                }
+            })
+            .catch(() => {
+                errorMessage.classList.add('show');
+            })
+            .finally(() => {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Envoyer le message';
-                
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    successMessage.classList.remove('show');
-                }, 5000);
-            }, 2000);
+            });
         });
 
         // Input validation styling
